@@ -1,7 +1,11 @@
+import TodayGames from "../components/TodayGames"
+
 const Home = () => {
     return (
-        <main className="text-center text-3xl p-18">
-            <h1 className="">Match du jour</h1>
+        <main className="text-center px-4 py-6">
+            <h1 className="text-2xl font-bold mb-6">MATCH DU JOUR 🏒</h1>
+
+            <TodayGames />
         </main>
     )
 }
