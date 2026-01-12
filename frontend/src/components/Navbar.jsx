@@ -5,26 +5,26 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="bg-base-300 shadow-sm px-4 md:px-8 py-2 relative">
+        <nav className="sticky bg-base-300 shadow-sm px-4 md:px-8 py-2 top-0 w-full z-50">
             {/* Conteneur principal centré */}
             <div className="flex flex-col md:flex-row items-center justify-center md:justify-center space-y-2 md:space-y-0 md:space-x-6">
 
                 {/* Logo */}
                 <Link to="/" className="btn btn-ghost text-xl">
-                    IceStats
+                    <img src="./src/assets/IceStats-logo.png" alt="IceStats Logo" className="h-10 w-auto" />
                 </Link>
 
                 {/* Liens desktop */}
                 <ul className="hidden md:flex space-x-6 text-sl">
-                    <li><Link to="/teams">Teams</Link></li>
-                    <li><Link to="/stats">Stats</Link></li>
-                    <li><Link to="/standings">Standings</Link></li>
+                    <li><Link to="/teams">Équipes</Link></li>
+                    <li><Link to="/players">Joueurs</Link></li>
+                    <li><Link to="/standings">Classement</Link></li>
                 </ul>
 
                 {/* Recherche */}
                 <input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Rechercher"
                     className="input input-bordered outline-0 w-24 md:w-40"
                 />
 
