@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import gamesRoutes from "./routes/games.routes.js"
 
 const app = express()
 
@@ -12,5 +13,7 @@ app.use(
 
 // Parser le JSON
 app.use(express.json())
+
+app.use("/api/games", gamesRoutes)
 
 export default app
