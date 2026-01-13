@@ -35,14 +35,16 @@ const TodayGames = () => {
         <div className="space-y-10 pt-10 sm:pt-10">
 
             {/* MATCHS DU JOUR */}
-            <section>
-                <h2 className="text-xl font-bold mb-4">Matchs du jour</h2>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {todayGames.map(game => (
-                        <GameCard key={game.id} game={game} />
-                    ))}
-                </div>
-            </section>
+            {todayGames.lenght > 0 && (
+                <section>
+                    <h2 className="text-xl font-bold mb-4">Matchs du jour</h2>
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {todayGames.map(game => (
+                            <GameCard key={game.id} game={game} />
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* MATCHS À VENIR */}
             {tomorrowGames.length > 0 && (

@@ -19,6 +19,7 @@ const Navbar = () => {
                     <li><Link to="/teams">Équipes</Link></li>
                     <li><Link to="/players">Joueurs</Link></li>
                     <li><Link to="/standings">Classement</Link></li>
+                    <li><Link to="/results">Résultats</Link></li>
                 </ul>
 
                 {/* Recherche */}
