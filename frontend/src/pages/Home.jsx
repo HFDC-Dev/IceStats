@@ -1,4 +1,5 @@
 import TodayGames from "../components/TodayGames"
+import TopScorers from "../components/TopScorers"
 
 const Home = () => {
     return (
@@ -6,6 +7,7 @@ const Home = () => {
             <h1 className="text-2xl font-bold mb-6">LES MATCHS 🏒</h1>
 
             <TodayGames />
+            <TopScorers />
         </main>
     )
 }
