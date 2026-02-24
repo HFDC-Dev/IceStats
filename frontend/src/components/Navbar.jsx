@@ -65,9 +65,10 @@ const Navbar = () => {
             {/* Menu mobile */}
             {isOpen && (
                 <ul className="flex flex-col items-center space-y-2 mt-2 md:hidden text-sl">
-                    <li><Link to="/teams">Teams</Link></li>
-                    <li><Link to="/stats">Stats</Link></li>
-                    <li><Link to="/standings">Standings</Link></li>
+                    <li><Link to="/teams">Équipes</Link></li>
+                    <li><Link to="/players">Joueurs</Link></li>
+                    <li><Link to="/standings">Classement</Link></li>
+                    <li><Link to="/results">Résultats</Link></li>
                 </ul>
             )}
         </nav>
