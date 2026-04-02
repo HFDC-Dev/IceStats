@@ -154,4 +154,59 @@ const sortGames = (games) =>
         return new Date(a.startTimeUTC) - new Date(b.startTimeUTC)
     })
 
+// Retourne les buts d'un match : buteur, passeurs, période, minute
+
+router.get("/:id/scoring", async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const { data } = await axios.get(
+            `https://api-web.nhle.com/v1/gamecenter/${id}/play-by-play`
+        )
+
+        const periodLabel = (p) => {
+            if (p === 1) return "1ère période"
+            if (p === 2) return "2ème période"
+            if (p === 3) return "3ème période"
+            if (p === 4) return "Prolongation"
+            if (p === 5) return "Tirs au but"
+            return `Période ${p}`
+        }
+
+        // On filtre uniquement les événements "goal"
+        const goals = (data.plays ?? [])
+            .filter(play => play.typeDescKey === "goal")
+            .map(play => {
+                const details = play.details ?? {}
+                const scorer = data.rosterSpots?.find(p => p.playerId === details.scoringPlayerId)
+                const assist1 = data.rosterSpots?.find(p => p.playerId === details.assist1PlayerId)
+                const assist2 = data.rosterSpots?.find(p => p.playerId === details.assist2PlayerId)
+
+                const fullName = (player) =>
+                    player
+                        ? `${player.firstName?.default ?? ""} ${player.lastName?.default ?? ""}`.trim()
+                        : null
+
+                return {
+                    period: play.periodDescriptor?.number ?? null,
+                    periodLabel: periodLabel(play.periodDescriptor?.number),
+                    timeInPeriod: play.timeInPeriod ?? null,   // ex: "14:32"
+                    teamAbbrev: details.eventOwnerTeamId === data.homeTeam?.id
+                        ? data.homeTeam?.abbrev
+                        : data.awayTeam?.abbrev,
+                    scorer: fullName(scorer),
+                    assist1: fullName(assist1),
+                    assist2: fullName(assist2),
+                    homeScore: details.homeScore ?? null,
+                    awayScore: details.awayScore ?? null,
+                    goalType: details.shotType ?? null,        // wrister, slap, etc.
+                }
+            })
+
+        res.json({ goals })
+    } catch (error) {
+        console.error("Scoring error:", error.message)
+        res.status(500).json({ error: "Erreur récupération des buts" })
+    }
+})
 export default router
