@@ -7,10 +7,9 @@ const TodayGames = () => {
     const [todayGames, setTodayGames] = useState([])
     const [tomorrowGames, setTomorrowGames] = useState([])
     const [fallbackGames, setFallbackGames] = useState([])
-    const [h2hData, setH2hData] = useState({}) // clé : "HOME_AWAY"
+    const [h2hData, setH2hData] = useState({})
     const [loading, setLoading] = useState(true)
 
-    // Fetch principal : matchs 
     const fetchGames = async () => {
         try {
             const { data } = await axios.get("http://localhost:5000/api/games/today")
@@ -20,10 +19,10 @@ const TodayGames = () => {
             setTomorrowGames(data.tomorrow ?? [])
             setFallbackGames(data.fallback ?? [])
 
-            // Lance les H2H pour les matchs du jour (statut non FINAL)
+            // H2H pour les matchs du jour (non terminés) + demain
             const gamesToFetch = [
                 ...(data.today ?? []).filter(g => !["OFF", "FINAL", "OVER"].includes(g.status)),
-                ...(data.tomorrow ?? []),  // ← ajouté
+                ...(data.tomorrow ?? []),
             ]
             fetchAllH2H(gamesToFetch)
         } catch (err) {
@@ -33,7 +32,6 @@ const TodayGames = () => {
         }
     }
 
-    // Fetch H2H pour une liste de matchs 
     const fetchAllH2H = async (games) => {
         const results = await Promise.allSettled(
             games.map(g =>
@@ -42,12 +40,9 @@ const TodayGames = () => {
                     .then(r => ({ key: `${g.home.abbrev}_${g.away.abbrev}`, data: r.data }))
             )
         )
-
         const map = {}
         results.forEach(r => {
-            if (r.status === "fulfilled") {
-                map[r.value.key] = r.value.data
-            }
+            if (r.status === "fulfilled") map[r.value.key] = r.value.data
         })
         setH2hData(map)
     }
@@ -83,18 +78,22 @@ const TodayGames = () => {
     return (
         <div className="space-y-12 pt-6">
 
-            {/*  RÉSULTATS DE LA VEILLE  */}
+            {/* ── RÉSULTATS DE LA VEILLE ─── */}
             {yesterdayGames.length > 0 && (
                 <Section title="Résultats d'hier" accent="text-slate-400">
                     <GameGrid>
                         {yesterdayGames.map(game => (
-                            <GameCard key={game.id} game={game} />
+                            <GameCard
+                                key={game.id}
+                                game={game}
+                                showScoring={true}
+                            />
                         ))}
                     </GameGrid>
                 </Section>
             )}
 
-            {/* MATCHS DU JOUR */}
+            {/* ── MATCHS DU JOUR ── */}
             {todayGames.length > 0 && (
                 <Section title="Matchs du jour" accent="text-blue-400">
                     <GameGrid>
@@ -109,18 +108,22 @@ const TodayGames = () => {
                 </Section>
             )}
 
-            {/* MATCHS À VENIR (demain)  */}
+            {/* ── MATCHS À VENIR (demain) ── */}
             {tomorrowGames.length > 0 && (
                 <Section title="Matchs à venir" accent="text-indigo-400">
                     <GameGrid>
                         {tomorrowGames.map(game => (
-                            <GameCard key={game.id} game={game} h2h={h2hData[`${game.home.abbrev}_${game.away.abbrev}`] ?? null} />
+                            <GameCard
+                                key={game.id}
+                                game={game}
+                                h2h={h2hData[`${game.home.abbrev}_${game.away.abbrev}`] ?? null}
+                            />
                         ))}
                     </GameGrid>
                 </Section>
             )}
 
-            {/* FALLBACK  */}
+            {/* ── FALLBACK ─── */}
             {todayGames.length === 0 &&
                 tomorrowGames.length === 0 &&
                 fallbackGames.length > 0 && (

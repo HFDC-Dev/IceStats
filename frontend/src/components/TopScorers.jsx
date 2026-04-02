@@ -34,7 +34,7 @@ const TopScorers = () => {
     return (
         <section className="mt-10">
             <h2 className="text-xl font-bold mb-4 text-left">
-                🔥 MEILLEURS BUTEURS NHL
+                MEILLEURS BUTEURS NHL
             </h2>
 
             <div className="overflow-x-auto">
