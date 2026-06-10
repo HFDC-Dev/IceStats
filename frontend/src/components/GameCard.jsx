@@ -147,7 +147,7 @@ const GameCard = ({ game, h2h = null, showScoring = false }) => {
                 </div>
 
                 {/* Score / VS */}
-                <div className="text-2xl sm:text-3xl font-bold text-center min-w-[70px] self-center">
+                <div className="text-2xl sm:text-3xl font-bold text-center min-w-[70px] self-start mt-5">
                     {isFuture
                         ? <span className="text-slate-500 text-lg">VS</span>
                         : <>{game.awayScore ?? "-"} – {game.homeScore ?? "-"}</>

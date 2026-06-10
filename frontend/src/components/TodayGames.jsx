@@ -3,7 +3,6 @@ import axios from "axios"
 import GameCard from "./GameCard"
 
 const TodayGames = () => {
-    const [yesterdayGames, setYesterdayGames] = useState([])
     const [todayGames, setTodayGames] = useState([])
     const [tomorrowGames, setTomorrowGames] = useState([])
     const [fallbackGames, setFallbackGames] = useState([])
@@ -14,7 +13,6 @@ const TodayGames = () => {
         try {
             const { data } = await axios.get("http://localhost:5000/api/games/today")
 
-            setYesterdayGames(data.yesterday ?? [])
             setTodayGames(data.today ?? [])
             setTomorrowGames(data.tomorrow ?? [])
             setFallbackGames(data.fallback ?? [])
@@ -62,7 +60,6 @@ const TodayGames = () => {
     }
 
     const hasContent =
-        yesterdayGames.length > 0 ||
         todayGames.length > 0 ||
         tomorrowGames.length > 0 ||
         fallbackGames.length > 0
@@ -78,24 +75,9 @@ const TodayGames = () => {
     return (
         <div className="space-y-12 pt-6">
 
-            {/* ── RÉSULTATS DE LA VEILLE ─── */}
-            {yesterdayGames.length > 0 && (
-                <Section title="Résultats d'hier" accent="text-slate-400">
-                    <GameGrid>
-                        {yesterdayGames.map(game => (
-                            <GameCard
-                                key={game.id}
-                                game={game}
-                                showScoring={true}
-                            />
-                        ))}
-                    </GameGrid>
-                </Section>
-            )}
-
             {/* ── MATCHS DU JOUR ── */}
             {todayGames.length > 0 && (
-                <Section title="Matchs du jour" accent="text-blue-400">
+                <Section title="Matchs du jour" accent="text-blue-400" className="text-left">
                     <GameGrid>
                         {todayGames.map(game => (
                             <GameCard
@@ -110,7 +92,7 @@ const TodayGames = () => {
 
             {/* ── MATCHS À VENIR (demain) ── */}
             {tomorrowGames.length > 0 && (
-                <Section title="Matchs à venir" accent="text-indigo-400">
+                <Section title="Matchs à venir" accent="text-indigo-400" className="text-left">
                     <GameGrid>
                         {tomorrowGames.map(game => (
                             <GameCard
@@ -139,8 +121,8 @@ const TodayGames = () => {
     )
 }
 
-const Section = ({ title, accent, children }) => (
-    <section>
+const Section = ({ title, accent, children, className = "" }) => (
+    <section className={className}>
         <h2 className={`text-xl font-bold mb-4 ${accent}`}>{title}</h2>
         {children}
     </section>
